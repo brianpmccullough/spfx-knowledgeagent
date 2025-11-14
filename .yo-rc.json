@@ -1,0 +1,19 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "nodeVersion": "22.16.0",
+    "sdksVersions": {},
+    "version": "1.21.1",
+    "libraryName": "spfx-knowledgeagent",
+    "libraryId": "77cb6cc5-1201-456d-b8f3-5e203bc311ef",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "spfx-knowledgeagent",
+    "solutionShortDescription": "spfx-knowledgeagent description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "extension",
+    "extensionType": "ApplicationCustomizer"
+  }
+}
