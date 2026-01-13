@@ -1,3 +1,15 @@
+# Node modules / build
+node_modules/
+dist/
+
+# dotenv files (ignore all .env files and variants)
+.env
+.env.*
+**/.env*
+aws/.env*
+
+# OS files
+.DS_Store
 # Logs
 logs
 *.log
