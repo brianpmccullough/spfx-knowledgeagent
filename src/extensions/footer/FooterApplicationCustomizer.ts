@@ -9,7 +9,7 @@ import { AadTokenProvider } from '@microsoft/sp-http';
 import * as strings from 'FooterApplicationCustomizerStrings';
 
 const LOG_SOURCE: string = 'FooterApplicationCustomizer';
-const API_URL: string = 'https://vvkqrydmkr.us-east-1.awsapprunner.com/api/me';
+const API_URL: string = 'https://vvkqrydmkr.us-east-1.awsapprunner.com/api/me'; //'http://localhost:3000/api/me'; //'https://vvkqrydmkr.us-east-1.awsapprunner.com/api/me';
 
 export interface IFooterApplicationCustomizerProperties {
   message: string;
