@@ -4,23 +4,25 @@
   "https": true,
   "serveConfigurations": {
     "default": {
-      "pageUrl": "https://{tenantDomain}/SitePages/myPage.aspx",
+      "pageUrl": "https://{tenantDomain}/SitePages/home.aspx",
       "customActions": {
         "6d48a638-7f31-45f6-bb8a-b0a51b631784": {
           "location": "ClientSideExtension.ApplicationCustomizer",
           "properties": {
-            "testMessage": "Test message"
+            "message": "SPFx Knowledge Agent",
+            "aadClientId": "d93c7720-43a9-4924-99c5-68464eb75b20"
           }
         }
       }
     },
     "footer": {
-      "pageUrl": "https://{tenantDomain}/SitePages/myPage.aspx",
+      "pageUrl": "https://{tenantDomain}/SitePages/home.aspx",
       "customActions": {
         "6d48a638-7f31-45f6-bb8a-b0a51b631784": {
           "location": "ClientSideExtension.ApplicationCustomizer",
           "properties": {
-            "testMessage": "Test message"
+            "message": "SPFx Knowledge Agent",
+            "aadClientId": "d93c7720-43a9-4924-99c5-68464eb75b20"
           }
         }
       }

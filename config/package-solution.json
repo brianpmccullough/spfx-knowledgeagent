@@ -7,6 +7,12 @@
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,
+    "webApiPermissionRequests": [
+      {
+        "resource": "d93c7720-43a9-4924-99c5-68464eb75b20",
+        "scope": "user_impersonation"
+      }
+    ],
     "developer": {
       "name": "",
       "websiteUrl": "",
