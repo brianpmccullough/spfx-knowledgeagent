@@ -8,7 +8,17 @@ import { AadTokenProvider } from '@microsoft/sp-http';
 import ChatMessage, { IChatMessage } from './ChatMessage';
 import styles from './Footer.module.scss';
 
-const API_URL: string = 'https://vvkqrydmkr.us-east-1.awsapprunner.com/api/me';
+const API_URL: string = 'https://vvkqrydmkr.us-east-1.awsapprunner.com/api/chat';
+
+interface IApiChatMessage {
+  role: 'user' | 'assistant' | 'system';
+  content: string;
+}
+
+interface IChatResponse {
+  response: string;
+  messages: IApiChatMessage[];
+}
 
 export interface IChatPanelProps {
   isOpen: boolean;
@@ -25,6 +35,7 @@ const STARTER_PROMPTS = [
 
 const ChatPanel: React.FC<IChatPanelProps> = ({ isOpen, onDismiss, context, aadClientId }) => {
   const [messages, setMessages] = React.useState<IChatMessage[]>([]);
+  const [apiMessages, setApiMessages] = React.useState<IApiChatMessage[]>([]);
   const [inputValue, setInputValue] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false);
   const messagesEndRef = React.useRef<HTMLDivElement>(null);
@@ -41,11 +52,11 @@ const ChatPanel: React.FC<IChatPanelProps> = ({ isOpen, onDismiss, context, aadC
     return `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   };
 
-  const callApi = async (userMessage: string): Promise<string> => {
+  const callApi = async (userMessage: string, currentHistory: IApiChatMessage[]): Promise<{ response: string; updatedHistory: IApiChatMessage[] }> => {
     try {
       if (!aadClientId) {
         console.error('AAD Client ID not configured');
-        return 'Error: AAD Client ID not configured';
+        return { response: 'Error: AAD Client ID not configured', updatedHistory: currentHistory };
       }
 
       const tokenProvider: AadTokenProvider = await context.aadTokenProviderFactory.getTokenProvider();
@@ -53,25 +64,34 @@ const ChatPanel: React.FC<IChatPanelProps> = ({ isOpen, onDismiss, context, aadC
 
       console.log('Token acquired successfully');
 
+      const newUserMessage: IApiChatMessage = { role: 'user', content: userMessage };
+      const messagesPayload = [...currentHistory, newUserMessage];
+
       const response = await fetch(API_URL, {
-        method: 'GET',
+        method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
-          'Accept': 'application/json'
-        }
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ messages: messagesPayload })
       });
 
       if (!response.ok) {
         console.error(`API call failed with status: ${response.status}`);
-        return `Error: API call failed with status ${response.status}`;
+        return { response: `Error: API call failed with status ${response.status}`, updatedHistory: currentHistory };
       }
 
-      const data = await response.json();
+      const data: IChatResponse = await response.json();
       console.log('API Response:', data);
-      return JSON.stringify(data, null, 2);
+
+      const assistantMessage: IApiChatMessage = { role: 'assistant', content: data.response };
+      const updatedHistory = [...messagesPayload, assistantMessage];
+
+      return { response: data.response, updatedHistory };
     } catch (error) {
       console.error('Error calling API:', error);
-      return `Error: ${error instanceof Error ? error.message : 'Unknown error occurred'}`;
+      return { response: `Error: ${error instanceof Error ? error.message : 'Unknown error occurred'}`, updatedHistory: currentHistory };
     }
   };
 
@@ -89,11 +109,12 @@ const ChatPanel: React.FC<IChatPanelProps> = ({ isOpen, onDismiss, context, aadC
     setInputValue('');
     setIsLoading(true);
 
-    const responseText = await callApi(userMessage.text);
+    const { response, updatedHistory } = await callApi(userMessage.text, apiMessages);
+    setApiMessages(updatedHistory);
 
     const botMessage: IChatMessage = {
       id: generateId(),
-      text: responseText,
+      text: response,
       sender: 'bot',
       timestamp: new Date()
     };
