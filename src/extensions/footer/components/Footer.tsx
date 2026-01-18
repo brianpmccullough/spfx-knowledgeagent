@@ -7,7 +7,6 @@ import styles from './Footer.module.scss';
 export interface IFooterProps {
   context: ApplicationCustomizerContext;
   aadClientId: string;
-  message?: string;
 }
 
 const Footer: React.FC<IFooterProps> = ({ context, aadClientId }) => {

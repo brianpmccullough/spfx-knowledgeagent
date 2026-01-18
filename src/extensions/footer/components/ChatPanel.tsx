@@ -8,7 +8,7 @@ import { AadTokenProvider } from '@microsoft/sp-http';
 import ChatMessage, { IChatMessage } from './ChatMessage';
 import styles from './Footer.module.scss';
 
-const API_URL: string = 'https://vvkqrydmkr.us-east-1.awsapprunner.com/api/chat';
+const API_URL: string = 'http://localhost:3000/api/chat'; // 'http://localhost:3000/api/chat'; // 'https://vvkqrydmkr.us-east-1.awsapprunner.com/api/chat';
 
 interface IApiChatMessage {
   role: 'user' | 'assistant' | 'system';
@@ -74,7 +74,7 @@ const ChatPanel: React.FC<IChatPanelProps> = ({ isOpen, onDismiss, context, aadC
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ messages: messagesPayload })
+        body: JSON.stringify({ messages: messagesPayload, context: { siteUrl: context.pageContext.web.absoluteUrl } })
       });
 
       if (!response.ok) {

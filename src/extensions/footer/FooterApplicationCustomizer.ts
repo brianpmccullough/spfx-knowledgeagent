@@ -49,7 +49,6 @@ export default class FooterApplicationCustomizer
           {
             context: this.context,
             aadClientId: this.properties.aadClientId,
-            message: this.properties.message
           }
         );
 
