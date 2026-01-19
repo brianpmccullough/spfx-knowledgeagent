@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pnp:Provisioning xmlns:pnp="http://schemas.dev.office.com/PnP/2022/09/ProvisioningSchema">
+  <pnp:Preferences Generator="PnP.Framework, Version=1.17.30.0, Culture=neutral, PublicKeyToken=0d501f89f11b748c" />
+  <pnp:Templates ID="CONTAINER-TEMPLATE-0026EAE84FE5451B916A08918F2562CB">
+    <pnp:ProvisioningTemplate ID="TEMPLATE-0026EAE84FE5451B916A08918F2562CB" Version="1" BaseSiteTemplate="SITEPAGEPUBLISHING#0" Scope="RootSite">
+      <pnp:SiteFields>
+        <Field Type="Boolean" DisplayName="IsKnowledge" Description="Used to declare a document or page as &quot;Knowledge&quot; for use with the Knowledge Agent." EnforceUniqueValues="FALSE" Indexed="FALSE" Group="Knowledge Agent" ID="{11b66c05-a57e-4e08-a3ac-e7f917f3cf6f}" SourceID="{206ce958-36d7-4325-884b-0436d02a6c83}" StaticName="IsKnowledge" Name="IsKnowledge">
+          <Default>0</Default>
+        </Field>
+      </pnp:SiteFields>
+    </pnp:ProvisioningTemplate>
+  </pnp:Templates>
+</pnp:Provisioning>

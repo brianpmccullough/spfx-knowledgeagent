@@ -1,5 +1,5 @@
 # https://laurakokkarinen.com/managing-sharepoint-framework-api-permissions-with-powershell/
-$resourceAppIds = @("d93c7720-43a9-4924-99c5-68464eb75b20") # This GUID is for Microsoft Graph; can also be custom API Client ID(s).
+$resourceAppIds = @("d93c7720-43a9-4924-99c5-68464eb75b20") # This GUID is for custom API Client ID(s).  Could also be for the Graph ("00000003-0000-0000-c000-000000000000").
 $scopes = @("user_impersonation") # E.g., "user_impersonation" for a custom API
 
 $spfxAppId = "08e18876-6177-487e-b8b5-cf950c1e598c" # SharePoint Online Web Client Extensibility

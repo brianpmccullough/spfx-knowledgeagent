@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+    <!-- Tenant-wide deployment (activated when skipFeatureDeployment is true) -->
+    <!-- NOTE: Currently disabled in package-solution.json - use PowerShell for deployment -->
     <ClientSideComponentInstance
-        Title="Footer"
+        Title="FooterApplicationCustomizer"
         Location="ClientSideExtension.ApplicationCustomizer"
         ComponentId="6d48a638-7f31-45f6-bb8a-b0a51b631784"
-        Properties="{&quot;testMessage&quot;:&quot;Test message&quot;}">
+        Properties="{&quot;apiUrl&quot;:&quot;https://your-api-endpoint.com/api/chat&quot;,&quot;aadClientId&quot;:&quot;your-aad-client-id&quot;,&quot;message&quot;:&quot;SPFx Knowledge Agent&quot;}">
     </ClientSideComponentInstance>
 </Elements>

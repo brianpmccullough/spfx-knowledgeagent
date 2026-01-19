@@ -4,20 +4,20 @@
   "https": true,
   "serveConfigurations": {
     "default": {
-      "pageUrl": "https://{tenantDomain}/SitePages/home.aspx",
+      "pageUrl": "https://{tenantDomain}/sites/hrweb",
       "customActions": {
         "6d48a638-7f31-45f6-bb8a-b0a51b631784": {
           "location": "ClientSideExtension.ApplicationCustomizer",
           "properties": {
             "message": "SPFx Knowledge Agent",
             "aadClientId": "d93c7720-43a9-4924-99c5-68464eb75b20",
-            "apiUrl": "http://localhost:3000/api/chat"
+            "apiUrl": "https://vvkqrydmkr.us-east-1.awsapprunner.com/api/chat"
           }
         }
       }
     },
-    "footer": {
-      "pageUrl": "https://{tenantDomain}/SitePages/home.aspx",
+    "dev": {
+      "pageUrl": "https://{tenantDomain}/sites/hrweb",
       "customActions": {
         "6d48a638-7f31-45f6-bb8a-b0a51b631784": {
           "location": "ClientSideExtension.ApplicationCustomizer",

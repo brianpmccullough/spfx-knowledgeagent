@@ -1,73 +1,181 @@
-# spfx-knowledgeagent
+# SPFx Knowledge Agent
 
-## Summary
+A SharePoint Framework (SPFx) Application Customizer that adds an AI-powered Knowledge Agent chat panel to SharePoint Online sites. Users can ask questions about site content and receive intelligent responses powered by RAG (Retrieval-Augmented Generation) or KQL-based search.
 
-Short summary on functionality and used technologies.
-
-[picture of the solution in action, if possible]
-
-## Used SharePoint Framework Version
-
-![version](https://img.shields.io/badge/version-1.21.1-green.svg)
-
-## Applies to
-
-- [SharePoint Framework](https://aka.ms/spfx)
-- [Microsoft 365 tenant](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/set-up-your-developer-tenant)
-
-> Get your own free development tenant by subscribing to [Microsoft 365 developer program](http://aka.ms/o365devprogram)
-
-## Prerequisites
-
-> Any special pre-requisites?
-
-## Solution
-
-| Solution    | Author(s)                                               |
-| ----------- | ------------------------------------------------------- |
-| folder name | Author details (name, company, twitter alias with link) |
-
-## Version history
-
-| Version | Date             | Comments        |
-| ------- | ---------------- | --------------- |
-| 1.1     | March 10, 2021   | Update comment  |
-| 1.0     | January 29, 2021 | Initial release |
-
-## Disclaimer
-
-**THIS CODE IS PROVIDED _AS IS_ WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING ANY IMPLIED WARRANTIES OF FITNESS FOR A PARTICULAR PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.**
-
----
-
-## Minimal Path to Awesome
-
-- Clone this repository
-- Ensure that you are at the solution folder
-- in the command-line run:
-  - **npm install**
-  - **gulp serve**
-
-> Include any additional steps as needed.
+![SPFx Version](https://img.shields.io/badge/SPFx-1.21.1-green.svg)
+![Node.js Version](https://img.shields.io/badge/Node.js-22.x-green.svg)
 
 ## Features
 
-Description of the extension that expands upon high-level summary above.
+- **Floating Chat Button** - Non-intrusive chat button positioned in the bottom-right corner of SharePoint pages
+- **Slide-out Panel** - Clean, modern chat interface using Fluent UI components
+- **Dual Search Modes** - Toggle between RAG (vector search) and KQL (keyword search) modes
+- **Azure AD Authentication** - Secure API calls using SPFx AAD token provider
+- **Site-Aware Context** - Passes site URL to the backend for contextual responses
+- **Per-Site Configuration** - Deploy to specific sites with custom API endpoints and settings
+- **Conversation History** - Maintains chat history within the session (page refresh)
 
-This extension illustrates the following concepts:
+## Prerequisites
 
-- topic 1
-- topic 2
-- topic 3
+- Node.js v22.x
+- SharePoint Online tenant with App Catalog
+- [Knowledge Agent Backend API](https://github.com/brianpmccullough/spfx-knowledgeagent-api) deployed and accessible
+- Azure AD App Registration for the backend API with permissions granted
+- PnP.PowerShell 2.x (for deployment using scripts)
+- Setup your [SPFx tenant domain](https://learn.microsoft.com/en-us/sharepoint/dev/spfx/set-up-your-development-environment#set-the-spfx_serve_tenant_domain-environment-variable-optional)
 
-> Notice that better pictures and documentation will increase the sample usage and the value you are providing for others. Thanks for your submissions advance.
+## Quick Start
 
-> Share your web part with others through Microsoft 365 Patterns and Practices program to get visibility and exposure. More details on the community, open-source projects and other activities from http://aka.ms/m365pnp.
+1. **Clone and install dependencies**
+
+   ```bash
+   git clone https://github.com/brianpmccullough/spfx-knowledgeagent.git
+   cd spfx-knowledgeagent
+   npm install
+   ```
+
+2. **Run the Knowledge Agent Backend API**
+   Run or deploy the [Knowledge Agent Backend API](https://github.com/brianpmccullough/spfx-knowledgeagent-api).  Specific steps available in the repo.
+
+3. **Configure for local development**
+
+   Update `config/serve.json` with your tenant and API settings.  You can update the "default" and/or "dev" configuration per your needs.
+
+   ```json
+   {
+     "properties": {
+       "aadClientId": "your-api-client-id",
+       "apiUrl": "https://your-api-endpoint/api/chat"
+     }
+   }
+   ```
+
+   | Property | Required | Description |
+   |----------|----------|-------------|
+   | `apiUrl` | Yes | Full URL to the Knowledge Agent chat API endpoint |
+   | `aadClientId` | Yes | EntraID (Azure AD) Client ID of the backend API (used for token acquisition to communicate with Knowledge Agent Backend API endpoint|
+   | `message` | No | Display message (default: "SPFx Knowledge Agent") |
+
+4. **Grant API permissions**
+   Let a SharePoint Online admin install and grant requested permissions to the knowledge agent api, or, to automate the setup, run the script:
+
+   ```powershell
+   cd scripts
+   ./set-entraid-permissions.ps1
+   ```
+
+5. **Run locally**
+
+   ```bash
+   gulp serve
+   ```
+
+   or
+
+   ```bash
+   gulp serve --config=dev
+   ```
+
+## Deployment
+
+### Build the package
+
+```bash
+gulp bundle --ship
+gulp package-solution --ship
+```
+
+### Deploy using PowerShell
+
+Requires a registered PnP PowerShell application. See [Deployment Guide](docs/deployment.md) for setup instructions.
+
+```powershell
+# Deploy to tenant app catalog
+./scripts/Manage-KnowledgeAgentCustomizer.ps1 -Action Deploy `
+    -PnPClientId "your-pnp-client-id" `
+    -TenantAdminUrl "https://contoso-admin.sharepoint.com" `
+    -PackagePath "./sharepoint/solution/spfx-knowledgeagent.sppkg"
+
+# Install on a specific site
+./scripts/Manage-KnowledgeAgentCustomizer.ps1 -Action Install `
+    -PnPClientId "your-pnp-client-id" `
+    -SiteUrl "https://contoso.sharepoint.com/sites/hr" `
+    -ApiUrl "https://your-api.com/api/chat" `
+    -AadClientId "your-client-id"
+```
+
+See [Deployment Guide](docs/deployment.md) for manual or batch installation, management operations, troubleshooting, and more.
+
+## Documentation
+
+- [Architecture Overview](docs/architecture.md)
+- [Azure AD Setup](docs/azure-ad-setup.md)
+- [Deployment Guide](docs/deployment.md)
+- [Configuration Reference](docs/configuration.md)
+
+## Project Structure
+
+```
+spfx-knowledgeagent/
+├── config/                     # SPFx configuration files
+│   ├── package-solution.json   # Solution packaging config
+│   └── serve.json              # Local development settings
+├── docs/                       # Documentation
+├── scripts/                    # PowerShell management scripts
+│   ├── Manage-KnowledgeAgentCustomizer.ps1
+│   ├── check-entraid-permissions.ps1
+│   └── set-entraid-permissions.ps1
+├── src/
+│   └── extensions/
+│       └── footer/             # Application Customizer
+│           ├── components/     # React components
+│           │   ├── ChatPanel.tsx
+│           │   ├── ChatMessage.tsx
+│           │   └── Footer.tsx
+│           └── FooterApplicationCustomizer.ts
+└── sharepoint/
+    └── solution/               # Packaged .sppkg file
+```
+
+## Scripts
+
+| Script | Description |
+|--------|-------------|
+| `Manage-KnowledgeAgentCustomizer.ps1` | Install, update, remove customizer on sites |
+| `set-entraid-permissions.ps1` | Grant API permissions to SPFx |
+| `check-entraid-permissions.ps1` | Verify current API permission grants |
+
+## API Contract
+
+The chat panel sends POST requests to the configured `apiUrl` with the following payload:
+
+```json
+{
+  "messages": [
+    { "role": "user", "content": "User message" },
+    { "role": "assistant", "content": "Previous response" }
+  ],
+  "context": {
+    "siteUrl": "https://contoso.sharepoint.com/sites/hr",
+    "searchMode": "rag"
+  }
+}
+```
+
+Expected response:
+```json
+{
+  "response": "Assistant response text",
+  "messages": [...]
+}
+```
+
+## License
+
+This project is provided as-is without warranty. See LICENSE file for details.
 
 ## References
 
-- [Getting started with SharePoint Framework](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/set-up-your-developer-tenant)
-- [Building for Microsoft teams](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/build-for-teams-overview)
-- [Use Microsoft Graph in your solution](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/web-parts/get-started/using-microsoft-graph-apis)
-- [Publish SharePoint Framework applications to the Marketplace](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/publish-to-marketplace-overview)
-- [Microsoft 365 Patterns and Practices](https://aka.ms/m365pnp) - Guidance, tooling, samples and open-source controls for your Microsoft 365 development
+- [SharePoint Framework Documentation](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/sharepoint-framework-overview)
+- [SPFx Application Customizers](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/extensions/get-started/using-page-placeholder-with-extensions)
+- [PnP PowerShell](https://pnp.github.io/powershell/)

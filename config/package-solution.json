@@ -14,7 +14,7 @@
       }
     ],
     "developer": {
-      "name": "",
+      "name": "https://github.com/brianpmccullough",
       "websiteUrl": "",
       "privacyUrl": "",
       "termsOfUseUrl": "",
@@ -30,21 +30,7 @@
       "screenshotPaths": [],
       "videoUrl": "",
       "categories": []
-    },
-    "features": [
-      {
-        "title": "Application Extension - Deployment of custom action",
-        "description": "Deploys a custom action with ClientSideComponentId association",
-        "id": "e54419eb-580f-4da3-86d9-8e40b316d62b",
-        "version": "1.0.0.0",
-        "assets": {
-          "elementManifests": [
-            "elements.xml",
-            "ClientSideInstance.xml"
-          ]
-        }
-      }
-    ]
+    }
   },
   "paths": {
     "zippedPackage": "solution/spfx-knowledgeagent.sppkg"
