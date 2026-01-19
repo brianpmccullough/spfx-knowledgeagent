@@ -7,9 +7,10 @@ import styles from './Footer.module.scss';
 export interface IFooterProps {
   context: ApplicationCustomizerContext;
   aadClientId: string;
+  apiUrl: string;
 }
 
-const Footer: React.FC<IFooterProps> = ({ context, aadClientId }) => {
+const Footer: React.FC<IFooterProps> = ({ context, aadClientId, apiUrl }) => {
   const [isPanelOpen, setIsPanelOpen] = React.useState(false);
 
   const handleButtonClick = (): void => {
@@ -36,6 +37,7 @@ const Footer: React.FC<IFooterProps> = ({ context, aadClientId }) => {
         onDismiss={handlePanelDismiss}
         context={context}
         aadClientId={aadClientId}
+        apiUrl={apiUrl}
       />
     </>
   );

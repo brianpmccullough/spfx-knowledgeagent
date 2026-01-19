@@ -15,6 +15,7 @@ const LOG_SOURCE: string = 'FooterApplicationCustomizer';
 export interface IFooterApplicationCustomizerProperties {
   message: string;
   aadClientId: string;
+  apiUrl: string;
 }
 
 export default class FooterApplicationCustomizer
@@ -49,6 +50,7 @@ export default class FooterApplicationCustomizer
           {
             context: this.context,
             aadClientId: this.properties.aadClientId,
+            apiUrl: this.properties.apiUrl,
           }
         );
 

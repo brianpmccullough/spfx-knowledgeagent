@@ -3,12 +3,12 @@ import { Panel, PanelType } from '@fluentui/react/lib/Panel';
 import { TextField } from '@fluentui/react/lib/TextField';
 import { IconButton } from '@fluentui/react/lib/Button';
 import { Icon } from '@fluentui/react/lib/Icon';
+import { Toggle } from '@fluentui/react/lib/Toggle';
 import { ApplicationCustomizerContext } from '@microsoft/sp-application-base';
 import { AadTokenProvider } from '@microsoft/sp-http';
 import ChatMessage, { IChatMessage } from './ChatMessage';
 import styles from './Footer.module.scss';
 
-const API_URL: string = 'http://localhost:3000/api/chat'; // 'http://localhost:3000/api/chat'; // 'https://vvkqrydmkr.us-east-1.awsapprunner.com/api/chat';
 
 interface IApiChatMessage {
   role: 'user' | 'assistant' | 'system';
@@ -25,6 +25,7 @@ export interface IChatPanelProps {
   onDismiss: () => void;
   context: ApplicationCustomizerContext;
   aadClientId: string;
+  apiUrl: string;
 }
 
 const STARTER_PROMPTS = [
@@ -33,11 +34,12 @@ const STARTER_PROMPTS = [
   'How do I find documents?'
 ];
 
-const ChatPanel: React.FC<IChatPanelProps> = ({ isOpen, onDismiss, context, aadClientId }) => {
+const ChatPanel: React.FC<IChatPanelProps> = ({ isOpen, onDismiss, context, aadClientId, apiUrl }) => {
   const [messages, setMessages] = React.useState<IChatMessage[]>([]);
   const [apiMessages, setApiMessages] = React.useState<IApiChatMessage[]>([]);
   const [inputValue, setInputValue] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false);
+  const [isRagMode, setIsRagMode] = React.useState(true);
   const messagesEndRef = React.useRef<HTMLDivElement>(null);
 
   const scrollToBottom = (): void => {
@@ -67,14 +69,14 @@ const ChatPanel: React.FC<IChatPanelProps> = ({ isOpen, onDismiss, context, aadC
       const newUserMessage: IApiChatMessage = { role: 'user', content: userMessage };
       const messagesPayload = [...currentHistory, newUserMessage];
 
-      const response = await fetch(API_URL, {
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ messages: messagesPayload, context: { siteUrl: context.pageContext.web.absoluteUrl } })
+        body: JSON.stringify({ messages: messagesPayload, context: { siteUrl: context.pageContext.web.absoluteUrl, searchMode: isRagMode ? 'rag' : 'kql' } })
       });
 
       if (!response.ok) {
@@ -139,6 +141,17 @@ const ChatPanel: React.FC<IChatPanelProps> = ({ isOpen, onDismiss, context, aadC
       <div className={styles.panelHeader}>
         <Icon iconName="ChatBot" className={styles.headerIcon} />
         <span className={styles.headerTitle}>Knowledge Agent</span>
+        <Toggle
+          className={styles.modeToggle}
+          checked={isRagMode}
+          onChange={(_, checked) => setIsRagMode(checked ?? true)}
+          onText="RAG"
+          offText="KQL"
+          styles={{
+            root: { marginBottom: 0 },
+            label: { marginLeft: 4 }
+          }}
+        />
       </div>
 
       <div className={styles.messagesContainer}>

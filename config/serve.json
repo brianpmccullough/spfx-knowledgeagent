@@ -10,7 +10,8 @@
           "location": "ClientSideExtension.ApplicationCustomizer",
           "properties": {
             "message": "SPFx Knowledge Agent",
-            "aadClientId": "d93c7720-43a9-4924-99c5-68464eb75b20"
+            "aadClientId": "d93c7720-43a9-4924-99c5-68464eb75b20",
+            "apiUrl": "http://localhost:3000/api/chat"
           }
         }
       }
@@ -22,7 +23,8 @@
           "location": "ClientSideExtension.ApplicationCustomizer",
           "properties": {
             "message": "SPFx Knowledge Agent",
-            "aadClientId": "d93c7720-43a9-4924-99c5-68464eb75b20"
+            "aadClientId": "d93c7720-43a9-4924-99c5-68464eb75b20",
+            "apiUrl": "http://localhost:3000/api/chat"
           }
         }
       }
