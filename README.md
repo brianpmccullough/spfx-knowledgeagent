@@ -5,6 +5,8 @@ A SharePoint Framework (SPFx) Application Customizer that adds an AI-powered Kno
 ![SPFx Version](https://img.shields.io/badge/SPFx-1.21.1-green.svg)
 ![Node.js Version](https://img.shields.io/badge/Node.js-22.x-green.svg)
 
+![Knowledge Agent Screenshot](./docs/screenshot.png)
+
 ## Features
 
 - **Floating Chat Button** - Non-intrusive chat button positioned in the bottom-right corner of SharePoint pages
