@@ -8,6 +8,9 @@ import { ApplicationCustomizerContext } from '@microsoft/sp-application-base';
 import { AadTokenProvider } from '@microsoft/sp-http';
 import ChatMessage, { IChatMessage } from './ChatMessage';
 import styles from './Footer.module.scss';
+import {
+  parseTranslationCommand
+} from '../utils/pageContentExtractor';
 
 
 interface IApiChatMessage {
@@ -31,7 +34,7 @@ export interface IChatPanelProps {
 const STARTER_PROMPTS = [
   'What can you help me with?',
   'Tell me about this site',
-  'How do I find documents?'
+  'Translate this page to Spanish'
 ];
 
 const ChatPanel: React.FC<IChatPanelProps> = ({ isOpen, onDismiss, context, aadClientId, apiUrl }) => {
@@ -97,12 +100,97 @@ const ChatPanel: React.FC<IChatPanelProps> = ({ isOpen, onDismiss, context, aadC
     }
   };
 
+  const addBotMessage = (text: string): void => {
+    const botMessage: IChatMessage = {
+      id: generateId(),
+      text,
+      sender: 'bot',
+      timestamp: new Date()
+    };
+    setMessages(prev => [...prev, botMessage]);
+  };
+
+  const handleTranslation = async (targetLanguage: string): Promise<void> => {
+    const elements = document.querySelectorAll<HTMLElement>('[data-sp-feature-tag="Rich Text Editor"]');
+
+    if (elements.length === 0) {
+      addBotMessage('No text content found on this page to translate.');
+      return;
+    }
+
+    addBotMessage(`Found ${elements.length} text section(s). Translating each to ${targetLanguage}...`);
+
+    const delay = (ms: number): Promise<void> => new Promise(resolve => setTimeout(resolve, ms));
+    let currentHistory = apiMessages;
+
+    for (let i = 0; i < elements.length; i++) {
+      const element = elements[i];
+      const originalStyles = {
+        border: element.style.border,
+        backgroundColor: element.style.backgroundColor,
+        transition: element.style.transition
+      };
+
+      try {
+        // Scroll and highlight
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        element.style.transition = 'background-color 0.3s, border 0.3s';
+        element.style.border = '2px dashed #0078d4';
+        element.style.backgroundColor = 'rgba(0, 120, 212, 0.1)';
+
+        await delay(500);
+
+        const textContent = element.textContent?.trim() || '';
+        if (!textContent) {
+          addBotMessage(`Section ${i + 1}: (empty, skipping)`);
+          element.style.border = originalStyles.border;
+          element.style.backgroundColor = originalStyles.backgroundColor;
+          continue;
+        }
+
+        addBotMessage(`**Section ${i + 1} of ${elements.length}** - Translating...`);
+
+        // Translate this section
+        const translationPrompt = `Translate the following text to ${targetLanguage}. Return ONLY the translated text, no explanations:\n\n${textContent}`;
+        const { response, updatedHistory } = await callApi(translationPrompt, currentHistory);
+        currentHistory = updatedHistory;
+
+        // Mark as processed (green) and show translation
+        element.style.border = '2px solid #107c10';
+        element.style.backgroundColor = 'rgba(16, 124, 16, 0.1)';
+
+        addBotMessage(response);
+
+        // Pause 5 seconds for user to read
+        await delay(5000);
+
+        // Restore original styles
+        element.style.transition = 'background-color 0.3s, border 0.3s';
+        element.style.border = originalStyles.border;
+        element.style.backgroundColor = originalStyles.backgroundColor;
+
+        await delay(300);
+
+      } catch (error) {
+        console.error(`Error translating section ${i + 1}:`, error);
+        addBotMessage(`Error translating section ${i + 1}: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        // Restore styles on error
+        element.style.border = originalStyles.border;
+        element.style.backgroundColor = originalStyles.backgroundColor;
+      }
+    }
+
+    setApiMessages(currentHistory);
+    addBotMessage(`Translation complete! All ${elements.length} sections translated to ${targetLanguage}.`);
+  };
+
   const handleSend = async (): Promise<void> => {
     if (!inputValue.trim() || isLoading) return;
 
+    const userText = inputValue.trim();
     const userMessage: IChatMessage = {
       id: generateId(),
-      text: inputValue.trim(),
+      text: userText,
       sender: 'user',
       timestamp: new Date()
     };
@@ -111,7 +199,16 @@ const ChatPanel: React.FC<IChatPanelProps> = ({ isOpen, onDismiss, context, aadC
     setInputValue('');
     setIsLoading(true);
 
-    const { response, updatedHistory } = await callApi(userMessage.text, apiMessages);
+    // Check for translation command
+    const targetLanguage = parseTranslationCommand(userText);
+    if (targetLanguage) {
+      await handleTranslation(targetLanguage);
+      setIsLoading(false);
+      return;
+    }
+
+    // Standard chat flow
+    const { response, updatedHistory } = await callApi(userText, apiMessages);
     setApiMessages(updatedHistory);
 
     const botMessage: IChatMessage = {
