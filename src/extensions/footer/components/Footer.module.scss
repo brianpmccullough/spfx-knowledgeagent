@@ -1,13 +1,12 @@
 @import '~@fluentui/react/dist/sass/References.scss';
 
-.chatButton {
+%chatButtonBase {
   position: fixed;
   bottom: 24px;
   right: 24px;
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background-color: #0078d4;
   border: none;
   cursor: pointer;
   display: flex;
@@ -17,12 +16,6 @@
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   z-index: 1000;
 
-  &:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
-    background-color: #106ebe;
-  }
-
   &:active {
     transform: scale(0.98);
   }
@@ -30,6 +23,29 @@
   i {
     color: white;
     font-size: 24px;
+  }
+}
+
+.chatButton {
+  @extend %chatButtonBase;
+  background-color: #0078d4;
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+    background-color: #106ebe;
+  }
+}
+
+// Site Owner mode — Fluent UI grape/purple (#8764b8)
+.chatButtonOwner {
+  @extend %chatButtonBase;
+  background-color: #8764b8;
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+    background-color: #6b4f96;
   }
 }
 

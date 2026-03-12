@@ -10,8 +10,20 @@ export interface IFooterProps {
   apiUrl: string;
 }
 
+interface ILegacyPageContext {
+  isSiteAdmin?: boolean;
+  isSiteOwner?: boolean;
+  hasManageWebPermissions?: boolean;
+}
+
 const Footer: React.FC<IFooterProps> = ({ context, aadClientId, apiUrl }) => {
   const [isPanelOpen, setIsPanelOpen] = React.useState(false);
+  const [isSiteOwnerMode, setIsSiteOwnerMode] = React.useState(false);
+
+  React.useEffect(() => {
+    const legacy = context.pageContext.legacyPageContext as ILegacyPageContext;
+    setIsSiteOwnerMode(legacy.isSiteAdmin || legacy.isSiteOwner || legacy.hasManageWebPermissions || false);
+  }, []);
 
   const handleButtonClick = (): void => {
     setIsPanelOpen(true);
@@ -24,7 +36,8 @@ const Footer: React.FC<IFooterProps> = ({ context, aadClientId, apiUrl }) => {
   return (
     <>
       <button
-        className={styles.chatButton}
+        type="button"
+        className={isSiteOwnerMode ? styles.chatButtonOwner : styles.chatButton}
         onClick={handleButtonClick}
         title="Open Knowledge Agent"
         aria-label="Open Knowledge Agent chat"
