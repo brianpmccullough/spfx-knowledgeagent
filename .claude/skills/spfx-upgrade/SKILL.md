@@ -3,7 +3,6 @@ name: spfx-upgrade
 description: Upgrade an SPFx project one version at a time using the m365 CLI. Use when the user asks to upgrade SPFx, bump the SPFx version, or run spfx project upgrade.
 allowed-tools: [Bash, Read, WebFetch]
 disable-model-invocation: true
-effort: high
 ---
 
 # SPFx Project Upgrade
