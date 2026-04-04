@@ -3,7 +3,8 @@
     "allow": [
       "Bash(tree:*)",
       "WebSearch",
-      "Bash(gulp serve:*)"
+      "Bash(gulp serve:*)",
+      "WebFetch(domain:pnp.github.io)"
     ]
   }
 }
