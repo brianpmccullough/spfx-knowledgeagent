@@ -2,7 +2,7 @@
 
 A SharePoint Framework (SPFx) Application Customizer that adds an AI-powered Knowledge Agent chat panel to SharePoint Online sites. Users can ask questions about site content and receive intelligent responses powered by RAG (Retrieval-Augmented Generation) or KQL-based search.
 
-![SPFx Version](https://img.shields.io/badge/SPFx-1.21.1-green.svg)
+![SPFx Version](https://img.shields.io/badge/SPFx-1.22.2-green.svg)
 ![Node.js Version](https://img.shields.io/badge/Node.js-22.x-green.svg)
 
 ![Knowledge Agent Screenshot](./docs/screenshot.png)
@@ -185,4 +185,5 @@ This project is provided as-is without warranty. See LICENSE file for details.
 
 ## Changelog
 
+- **2026-04-04** — SPFx upgrade to 1.22.2
 - **2026-04-04** — SPFx upgrade to 1.22.1
