@@ -181,3 +181,8 @@ This project is provided as-is without warranty. See LICENSE file for details.
 - [SharePoint Framework Documentation](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/sharepoint-framework-overview)
 - [SPFx Application Customizers](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/extensions/get-started/using-page-placeholder-with-extensions)
 - [PnP PowerShell](https://pnp.github.io/powershell/)
+
+
+## Changelog
+
+- **2026-04-04** — SPFx upgrade to 1.22.1
