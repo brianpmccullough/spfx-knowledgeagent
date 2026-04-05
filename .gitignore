@@ -44,3 +44,9 @@ obj
 
 # Styles Generated Code
 *.scss.ts
+
+# Heft output folders
+lib-dts
+lib-commonjs
+lib-esm
+jest-output
