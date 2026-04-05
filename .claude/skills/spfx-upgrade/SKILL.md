@@ -92,18 +92,25 @@ If the user declines, warn once and continue.
 
 ## Step 5 — Run the upgrade
 
+**Before running**: Check for an existing `docs`, `doc`, or `documentation` folder and determine the report path: `<docs-folder>/spfx-upgrades/upgrade-<target-version>.md`, or `docs/spfx-upgrades/upgrade-<target-version>.md` if none exists. Ask the user if they want to save the report there. Record their answer as `<report-path>` (or "discard" if they decline).
+
+Run the upgrade report, writing directly to the final destination if saving, or a temp file if discarding:
+
 ```bash
+# If saving:
+mkdir -p "$(dirname <report-path>)" && m365 spfx project upgrade --toVersion <target-version> --output md > "<report-path>"
+
+# If discarding:
 m365 spfx project upgrade --toVersion <target-version> --output md > /tmp/spfx-upgrade-report.md
 ```
 
-Read `/tmp/spfx-upgrade-report.md` and present the upgrade steps to the user, grouped by type:
+Read the report and present the upgrade steps to the user, grouped by type:
 - **Package changes** (add/remove dependencies in `package.json`)
 - **Config file changes** (create/update files under `config/`, `tsconfig.json`, etc.)
 - **Code changes** (source file updates)
 - **Manual steps** (anything that cannot be automated)
 
-**Persist the report**: Check for an existing `docs`, `doc`, or `documentation` folder. Suggest saving to `<docs-folder>/spfx-upgrades/upgrade-<target-version>.md`; otherwise suggest `docs/spfx-upgrades/upgrade-<target-version>.md`. If the user agrees, copy before deleting.
-
+If discarding, delete the temp file now:
 ```bash
 rm /tmp/spfx-upgrade-report.md
 ```
