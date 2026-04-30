@@ -4,8 +4,15 @@
   "https": true,
   "serveConfigurations": {
     "default": {
-      "pageUrl": "https://{tenantDomain}/sites/hrweb",
+      "pageUrl": "https://{tenantDomain}/sites/news/sitepages",
       "customActions": {
+        "d348e056-1883-4624-82be-1293f0297b8c": {
+          "location": "ClientSideExtension.ListViewCommandSet.CommandBar",
+          "properties": {
+            "apiUrl": "http://localhost:3000/api",
+            "aadClientId": "d93c7720-43a9-4924-99c5-68464eb75b20"
+          }
+        },
         "6d48a638-7f31-45f6-bb8a-b0a51b631784": {
           "location": "ClientSideExtension.ApplicationCustomizer",
           "properties": {
@@ -25,6 +32,18 @@
             "message": "SPFx Knowledge Agent",
             "aadClientId": "d93c7720-43a9-4924-99c5-68464eb75b20",
             "apiUrl": "http://localhost:3000/api/chat"
+          }
+        }
+      }
+    },
+    "translationServices": {
+      "pageUrl": "https://{tenantDomain}/sites/news/sitepages",
+      "customActions": {
+        "d348e056-1883-4624-82be-1293f0297b8c": {
+          "location": "ClientSideExtension.ListViewCommandSet.CommandBar",
+          "properties": {
+            "apiUrl": "https://vvkqrydmkr.us-east-1.awsapprunner.com/api",
+            "aadClientId": "d93c7720-43a9-4924-99c5-68464eb75b20"
           }
         }
       }

@@ -1,7 +1,7 @@
 {
   "@microsoft/generator-sharepoint": {
     "plusBeta": false,
-    "isCreatingSolution": true,
+    "isCreatingSolution": false,
     "nodeVersion": "22.16.0",
     "sdksVersions": {},
     "version": "1.22.2",
@@ -15,6 +15,6 @@
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,
     "componentType": "extension",
-    "extensionType": "ApplicationCustomizer"
+    "extensionType": "ListViewCommandSet"
   }
 }
